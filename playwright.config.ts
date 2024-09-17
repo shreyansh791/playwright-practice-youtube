@@ -11,7 +11,7 @@ import { defineConfig, devices } from '@playwright/test';
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  globalSetup: "./global-setup.ts",
+  // globalSetup: "./global.setup.ts",
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -31,15 +31,20 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    storageState: "./playwright/.auth/auth.json"
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
+      name: 'setup',
+      testMatch: 'global.setup.ts'
+    },
+    {
       name: 'chromium',
+      dependencies: ['setup'],
       use: {
-        ...devices['Desktop Chrome']
+        ...devices['Desktop Chrome'],
+        storageState: "./playwright/.auth/auth.json"
       },
     }
 
